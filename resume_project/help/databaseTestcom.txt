@@ -1,0 +1,21 @@
+# Build the Docker image
+docker build -t my-postgres .
+
+# Run the PostgreSQL container
+docker run --name test-postgres -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=resume_db -d my-postgres
+
+# Access the PostgreSQL container
+docker exec -it test-postgres psql -U user -d resume_db
+
+# Inside psql shell
+\dt
+\d likes
+\d comments
+INSERT INTO likes DEFAULT VALUES;
+INSERT INTO comments (text) VALUES ('This is a test comment');
+SELECT * FROM likes;
+SELECT * FROM comments;
+
+# Clean up
+docker stop test-postgres
+docker rm test-postgres

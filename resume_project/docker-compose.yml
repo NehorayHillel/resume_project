@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./backend
+    container_name: resume_web
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy  
+    restart: always  
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=app.py
+      - SQLALCHEMY_DATABASE_URI=postgresql://user:password@db:5432/resume_db
+    volumes:
+      - ./backend:/app
+
+  db:
+    build: ./database
+    container_name: resume_db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: resume_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql 
+    healthcheck:  
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 5s
+      retries: 5
+      timeout: 3s
+
+volumes:
+  postgres_data:
