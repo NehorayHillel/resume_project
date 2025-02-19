@@ -1,0 +1,14 @@
+docker build -t my-jenkins .
+docker run -d --name jenkins -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home --restart unless-stopped my-jenkins
+
+docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+
+Jenkis login :
+admin
+291e148165054aab9429cc1e0b218ae1
+
+
+githum access token for jenkins:
+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
+
+
